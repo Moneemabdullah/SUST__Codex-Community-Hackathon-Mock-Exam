@@ -1,13 +1,42 @@
+# Dependencies
 node_modules/
+.pnpm-store/
+
+# Build output
 dist/
 build/
-__pycache__/
-*.pyc
-.venv/
-venv/
-.env
+coverage/
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
 .DS_Store
-.vscode/
 .idea/
-AGENTS.md
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+Thumbs.db
+
+# PM2
+.pm2/
+*.pid
+
+# TypeScript
+*.tsbuildinfo
+
+# puku metadata (editor caches)
+.puku/
+
