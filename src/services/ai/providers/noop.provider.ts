@@ -27,6 +27,6 @@ export class NoopProvider implements ILLMProvider {
       content: '',
       durationMs: elapsed(),
     };
-    return ok(result);
+    return Promise.resolve(ok(result));
   }
 }
