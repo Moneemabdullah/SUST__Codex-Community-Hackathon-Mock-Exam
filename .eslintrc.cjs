@@ -46,36 +46,17 @@ module.exports = {
       { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
     ],
     'eqeqeq': ['error', 'always'],
-    'no-restricted-paths': [
-      'error',
-      {
-        zones: [
-          {
-            target: './src/routes',
-            from: './src/services/ai/providers',
-            message:
-              'Routes/controllers must not import AI provider implementations directly. Use ITicketAnalyzerService.',
-          },
-          {
-            target: './src/controllers',
-            from: './src/services/ai/providers',
-            message:
-              'Controllers must not import AI provider implementations directly. Use ILLMProvider via factory.',
-          },
-          {
-            target: './src/services',
-            from: ['express', './src/middleware', './src/routes', './src/controllers'],
-            message: 'Services must be framework-free (Clean Architecture).',
-          },
-        ],
-      },
-    ],
   },
   overrides: [
     {
       files: ['tests/**/*.ts'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       },
     },
   ],

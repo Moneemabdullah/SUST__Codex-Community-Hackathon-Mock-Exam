@@ -17,7 +17,7 @@ import { startTimer } from '../../../utils/timer.util.js';
 export class NoopProvider implements ILLMProvider {
   public readonly name: LLMProviderName = AI_PROVIDER.NOOP;
 
-  public async complete(
+  public complete(
     _request: LLMCompletionRequest,
   ): Promise<Result<LLMCompletionResult, never>> {
     const elapsed = startTimer();

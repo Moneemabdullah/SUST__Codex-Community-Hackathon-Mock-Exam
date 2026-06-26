@@ -49,7 +49,7 @@ export const ok = <T>(
   return res
     .status(options.statusCode ?? HTTP_STATUS.OK)
     .type(CONTENT_TYPE.JSON)
-    .json(body);
+    .json(body) as Response<SuccessEnvelope<T>>;
 };
 
 export const created = <T>(
@@ -74,5 +74,5 @@ export const fail = (
     error,
     meta: buildMeta(res, options.durationMs),
   };
-  return res.status(statusCode).type(CONTENT_TYPE.JSON).json(body);
+  return res.status(statusCode).type(CONTENT_TYPE.JSON).json(body) as Response<ErrorEnvelope>;
 };
