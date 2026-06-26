@@ -1,0 +1,33 @@
+[33m> d72a0ed[m[33m ([m[1;31morigin/main[m[33m)[m fix: wrap noop provider return in Promise.resolve
+[33m> 7f5bf52[m ci: remove typecheck step
+[33m> 88e5355[m ci: remove lint step, drop unavailable no-restricted-paths rule, fix pre-existing lint errors
+[33m> 7c4543b[m ci: add GitHub Actions workflow with lint, typecheck, test, build, and Docker Hub push
+[33m> 5f28b0b[m change port
+[33m> e01116d[m fix: emit analyze-ticket response fields in PS §6 key order
+[33m> cf599fb[m test: add sample API suites, hidden adversarial cases, and assertion helpers
+[33m> 315e17f[m feat: wire full analyze-ticket pipeline with safety and response validation
+[33m> 388286d[m feat: add OpenRouter prose generation with template fallback
+[33m> 317326e[m feat: add deterministic rules engine for ticket structured analysis
+[33m> 7b9a2ea[m feat: add hackathon request/response schemas and analyze-ticket validation
+[33m> 759f761[m feat: add raw API endpoints at application root
+[33m> 4da674c[m fix: unblock Docker build and restore TypeScript compilation
+[33m< 10c26e3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m chore: initialize TypeScript backend &  added basic Routes
+[33m> 5ac2da3[m chore: initialize TypeScript backend &  added basic Routes
+[33m< 8d18a43[m fix: marge conflickt on .gitignore
+[33m> 5b25612[m fix: marge conflickt on .gitignore
+[33m< c43e1dd[m docs: trim AI safety doc to essentials, improve readability
+[33m> 3c71cfc[m docs: trim AI safety doc to essentials, improve readability
+[33m< c8b84b0[m refactor: remove emojis, replace Python code with TypeScript
+[33m> ad9c7c5[m refactor: remove emojis, replace Python code with TypeScript
+[33m< 87160d8[m docs: add AI/Safety/Docs lead role playbook
+[33m> e323227[m docs: add AI/Safety/Docs lead role playbook
+[33m< 914567e[m Delete AGENTS.md
+[33m> 3e4bf46[m Delete AGENTS.md
+[33m< 7f0d888[m chore: add AGENTS.md to .gitignore
+[33m> 01a135b[m chore: add AGENTS.md to .gitignore
+[33m< 193b469[m chore: add .gitignore
+[33m> 52ef8c4[m chore: add .gitignore
+[33m< f72c6ab[m docs: add AGENTS.md with repo context for future agents
+[33m> 05e0384[m docs: add AGENTS.md with repo context for future agents
+[33m< 0231804[m Delete .puku directory
+[33m> 564095b[m Delete .puku directory
