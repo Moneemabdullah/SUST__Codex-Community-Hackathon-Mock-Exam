@@ -24,7 +24,8 @@ const VAGUE_PATTERNS = [
 ];
 
 export const isPhishingComplaint = (complaint: string): boolean =>
-  PHISHING_PATTERNS.some((pattern) => pattern.test(complaint));
+  PHISHING_PATTERNS.some((pattern) => pattern.test(complaint)) ||
+  /(ওটিপি|পিন).*(শেয়ার|দিতে|চায়)/.test(complaint);
 
 export const isVagueComplaint = (complaint: string): boolean => {
   const trimmed = complaint.trim();
@@ -98,8 +99,9 @@ export const classifyComplaint = ({
   }
 
   if (
+    /\bwrong transfer\b/i.test(lower) ||
     /\bwrong (?:number|person|recipient)\b/i.test(lower) ||
-    /\b(?:mistake|typed (?:it )?wrong)\b/i.test(lower) ||
+    /\b(?:mistake|mistaken|typed (?:it )?wrong)\b/i.test(lower) ||
     (/\bsent\b/i.test(lower) &&
       /\b(?:didn't get|did not get|not respond|brother|sister)\b/i.test(lower))
   ) {

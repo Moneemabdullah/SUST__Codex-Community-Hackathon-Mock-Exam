@@ -16,8 +16,15 @@ export const stripInjection = (text: string): string => {
   return result;
 };
 
-const scrubCredentials = (text: string): string =>
-  CREDENTIAL_PATTERNS.some((pattern) => pattern.test(text)) ? SAFE_CREDENTIALS : text;
+const isCredentialSafetyWarning = (text: string): boolean =>
+  /\b(do not|don't|never|not)\s+share\b/i.test(text) || /শেয়ার করবেন না/.test(text);
+
+const scrubCredentials = (text: string): string => {
+  if (isCredentialSafetyWarning(text)) {
+    return text;
+  }
+  return CREDENTIAL_PATTERNS.some((pattern) => pattern.test(text)) ? SAFE_CREDENTIALS : text;
+};
 
 const scrubRefund = (text: string): string =>
   REFUND_PATTERNS.some((pattern) => pattern.test(text)) ? SAFE_REFUND : text;
