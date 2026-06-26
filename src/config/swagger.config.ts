@@ -3,7 +3,25 @@ import { fileURLToPath } from 'node:url';
 import { appConfig } from './app.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const here = path.dirname(__filename);
+
+// /**
+//  * Resolve a glob that finds the source route files regardless of whether
+//  * the process is running compiled (`dist/config`) or via `tsx` (`src/config`).
+//  *
+//  * `src/` and `dist/` are kept structurally aligned by `tsconfig.build.json`,
+//  * so `../routes/**/.js` (compiled) and `../routes/**/*.ts` (dev) both work.
+
+// **/
+
+
+
+const routesGlob = ((): string => {
+  const compiledCandidate = path.resolve(here, '../routes/**/*.js');
+  const sourceCandidate = path.resolve(here, '../routes/**/*.ts');
+  const runningCompiled = here.includes(`${path.sep}dist${path.sep}`);
+  return runningCompiled ? compiledCandidate : sourceCandidate;
+})();
 
 export interface SwaggerConfig {
   readonly definition: {
@@ -36,8 +54,7 @@ export const swaggerConfig: Readonly<SwaggerConfig> = Object.freeze({
       { name: 'Tickets', description: 'Ticket analysis operations' },
     ],
   },
-  // JSDoc comments in routes/*.ts are parsed by swagger-jsdoc.
-  apis: [path.resolve(__dirname, '../../src/routes/**/*.ts')],
+  apis: [routesGlob],
   route: '/docs',
   jsonRoute: '/openapi.json',
 });

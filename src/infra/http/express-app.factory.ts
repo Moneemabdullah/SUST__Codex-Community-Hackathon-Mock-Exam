@@ -1,4 +1,4 @@
-import express, { type Application, type RequestHandler } from 'express';
+import express, { type Application, type RequestHandler, type Router } from 'express';
 import { securityConfig } from '../../config/security.config.js';
 import { rootLogger } from '../logger/pino.logger.js';
 import {
@@ -12,11 +12,12 @@ import {
   securityHeadersMiddleware,
 } from '../../middleware/index.js';
 import { httpLoggerMiddleware } from '../logger/logger.middleware.js';
-import { apiRouter } from '../../routes/index.js';
-import { docsRouter } from '../../routes/docs.routes.js';
 
 export interface BuildAppOptions {
-  /** Hook for tests to swap middleware/router (e.g. disable rate limit). */
+  /** Routers wired by the composition root. */
+  readonly docsRouter: Router;
+  readonly apiRouter: Router;
+  /** Hook for tests to swap middleware (e.g. disable rate limit). */
   beforeMountRoutes?: (app: Application) => void;
 }
 
@@ -26,7 +27,7 @@ export interface BuildAppOptions {
  * Order is canonical and non-negotiable; see `docs/ARCHITECTURE.md`.
  * No `listen()` here — that's the responsibility of `server.ts`.
  */
-export const buildExpressApp = (options: BuildAppOptions = {}): Application => {
+export const buildExpressApp = (options: BuildAppOptions): Application => {
   const app = express();
 
   if (securityConfig.trustProxy) {
@@ -56,10 +57,10 @@ export const buildExpressApp = (options: BuildAppOptions = {}): Application => {
   options.beforeMountRoutes?.(app);
 
   // Docs first so it doesn't get hidden behind a future rate-limit tuning.
-  app.use('/docs', docsRouter());
+  app.use('/docs', options.docsRouter);
 
   // [10] Routers
-  app.use(apiRouter);
+  app.use(options.apiRouter);
 
   // [11] 404
   app.use(notFoundMiddleware);

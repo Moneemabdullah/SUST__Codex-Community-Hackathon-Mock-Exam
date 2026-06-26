@@ -1,0 +1,31 @@
+openapi: 3.0.3
+info:
+  title: SUST Codex Community — Preliminary API
+  version: 0.1.0
+  description: |
+    Initial scaffold. `/health`, `/version`, and `/metrics` are live.
+    `POST /analyze-ticket` is reserved for the next milestone.
+servers:
+  - url: http://localhost:3000
+paths:
+  /v1/health:
+    get:
+      summary: Liveness probe
+      tags: [health]
+      responses:
+        '200':
+          description: Service is up
+  /v1/version:
+    get:
+      summary: Build / instance metadata
+      tags: [meta]
+      responses:
+        '200':
+          description: Version info
+  /v1/metrics:
+    get:
+      summary: Reserved for future Prometheus exposition
+      tags: [meta]
+      responses:
+        '200':
+          description: Disabled placeholder

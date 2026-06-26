@@ -1,20 +1,15 @@
 import { Router } from 'express';
 
-import type { HealthService } from '../services/health.service.js';
-import type { VersionService } from '../services/version.service.js';
-import { buildV1Router } from './v1/index.js';
+import type { V1Routes } from './v1/index.js';
 
 export interface ApiRouterDeps {
-  readonly healthService: HealthService;
-  readonly versionService: VersionService;
+  readonly v1Routes: V1Routes;
 }
 
 export const buildApiRouter = (deps: ApiRouterDeps): Router => {
   const router = Router();
 
-  router.use('/v1', buildV1Router(deps));
+  router.use('/v1', deps.v1Routes.combined);
 
   return router;
 };
-
-export { buildV1Router } from './v1/index.js';
