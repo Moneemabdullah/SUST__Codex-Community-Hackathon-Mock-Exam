@@ -10,6 +10,8 @@ export const buildApiRouter = (deps: ApiRouterDeps): Router => {
   const router = Router();
 
   router.use('/v1', deps.v1Routes.combined);
+  // Liveness probe for load balancers, Docker HEALTHCHECK, and nginx.
+  router.use('/', deps.v1Routes.health);
 
   return router;
 };

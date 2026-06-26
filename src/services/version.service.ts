@@ -17,7 +17,7 @@ export class VersionService {
     return {
       service: appConfig.name,
       version: appConfig.version,
-      environment: appConfig.env,
+      environment: appConfig.nodeEnv,
       nodeVersion: process.version,
       instanceId: this.instanceId,
     };

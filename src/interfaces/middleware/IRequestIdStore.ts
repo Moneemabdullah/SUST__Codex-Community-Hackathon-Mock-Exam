@@ -4,5 +4,6 @@
  */
 export interface IRequestIdStore {
   generate(): string;
+  resolve(inbound: string | string[] | undefined): string;
   readonly headerName: string;
 }

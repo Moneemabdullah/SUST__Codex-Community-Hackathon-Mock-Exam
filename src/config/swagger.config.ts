@@ -39,9 +39,9 @@ export interface SwaggerConfig {
   readonly jsonRoute: string;
 }
 
-export const swaggerConfig: Readonly<SwaggerConfig> = Object.freeze({
+export const swaggerConfig = Object.freeze({
   definition: {
-    openapi: '3.0.3',
+    openapi: '3.0.3' as const,
     info: {
       title: `${appConfig.name} API`,
       version: appConfig.version,
@@ -57,4 +57,4 @@ export const swaggerConfig: Readonly<SwaggerConfig> = Object.freeze({
   apis: [routesGlob],
   route: '/docs',
   jsonRoute: '/openapi.json',
-});
+}) satisfies Readonly<SwaggerConfig>;

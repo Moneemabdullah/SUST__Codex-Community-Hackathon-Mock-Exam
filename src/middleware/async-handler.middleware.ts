@@ -2,6 +2,8 @@ import type { RequestHandler } from 'express';
 import { asyncHandler } from '../utils/async-handler.util.js';
 import type { IController } from '../interfaces/http/IController.js';
 
+export { asyncHandler };
+
 /**
  * Re-export so routes can import `asyncHandlerMiddleware` and keep the
  * transport naming consistent with the other middlewares.

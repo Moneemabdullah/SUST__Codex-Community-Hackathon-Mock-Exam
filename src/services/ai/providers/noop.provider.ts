@@ -1,4 +1,4 @@
-import { AI_PROVIDER, type LLMProviderName } from '../../constants/ai.constants.js';
+import { AI_PROVIDER, type LLMProviderName } from '../../../constants/ai.constants.js';
 import type { ILLMProvider } from '../../../interfaces/ai/ILLMProvider.js';
 import type {
   LLMCompletionRequest,
