@@ -3,3 +3,4 @@ export * from './schemas/analyze-ticket.schema.js';
 export * from './schemas/analyze-ticket-response.schema.js';
 export * from './middlewares/validate.middleware.js';
 export * from './middlewares/analyze-ticket-semantic.middleware.js';
+export * from './response.validator.js';
