@@ -15,6 +15,7 @@ import {
   sanitizeUserComplaint,
 } from '../../safety/index.js';
 import { validateResponse } from '../../validators/response.validator.js';
+import { buildTicketAnalysisResponse } from './build-ticket-analysis-response.js';
 import { generateProse } from './ticket-prose.service.js';
 import { analyzeStructured } from './ticket-rules.engine.js';
 
@@ -40,20 +41,11 @@ export class TicketAnalyzerService implements ITicketAnalyzerService {
       const structured = analyzeStructured(sanitizedRequest);
       const prose = await generateProse(sanitizedRequest, structured, this.provider);
 
-      const response: TicketAnalysisResponse = {
-        ticket_id: request.ticket_id,
-        relevant_transaction_id: structured.relevant_transaction_id,
-        evidence_verdict: structured.evidence_verdict,
-        case_type: structured.case_type,
-        severity: structured.severity,
-        department: structured.department,
-        human_review_required: structured.human_review_required,
+      const response = buildTicketAnalysisResponse(request.ticket_id, structured, {
         agent_summary: sanitizeAgentSummary(prose.agent_summary),
         recommended_next_action: sanitizeNextAction(prose.recommended_next_action),
         customer_reply: sanitizeCustomerReply(prose.customer_reply),
-        confidence: structured.confidence,
-        reason_codes: structured.reason_codes,
-      };
+      });
 
       const validation = validateResponse(response);
       if (!validation.valid) {

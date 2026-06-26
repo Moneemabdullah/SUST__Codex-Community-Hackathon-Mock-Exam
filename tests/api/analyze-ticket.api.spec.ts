@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import request from 'supertest';
 
 import { buildAppGraph } from '../../src/container.js';
+import { TICKET_ANALYSIS_RESPONSE_KEY_ORDER } from '../../src/services/ticket/build-ticket-analysis-response.js';
 import { validateResponse } from '../../src/validators/response.validator.js';
 import { loadPublicSamples } from '../helpers/fixtures.js';
 import {
@@ -28,6 +29,14 @@ describe('POST /analyze-ticket (judge contract)', () => {
       expect(validateResponse(res.body).valid).toBe(true);
     },
   );
+
+  it('returns response fields in PS §6 key order', async () => {
+    const sample = sampleCases[0];
+    const res = await request(app).post('/analyze-ticket').send(sample.input);
+
+    expect(res.status).toBe(200);
+    expect(Object.keys(res.body)).toEqual([...TICKET_ANALYSIS_RESPONSE_KEY_ORDER]);
+  });
 
   it('SAMPLE-07 returns Bangla customer_reply', async () => {
     const sample = sampleCases.find((entry) => entry.id === 'SAMPLE-07');
