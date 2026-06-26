@@ -6,30 +6,34 @@ import type {
 } from '../../types/ticket.types.js';
 import type { AppError } from '../../errors/AppError.js';
 import type { Result } from '../../types/result.types.js';
-import { err } from '../../utils/result-from.util.js';
-import { AIProviderError } from '../../errors/AIProviderError.js';
-import { AI_PROVIDER } from '../../constants/ai.constants.js';
+import { ok } from '../../utils/result-from.util.js';
+import { analyzeStructured } from './ticket-rules.engine.js';
+
+const PLACEHOLDER_PROSE = {
+  agent_summary: 'Structured analysis complete. Prose generation pending.',
+  recommended_next_action: 'Review structured fields and generate operational guidance via LLM.',
+  customer_reply:
+    'Thank you for reaching out. Please do not share your PIN or OTP with anyone.',
+} as const;
 
 /**
- * Composition root wires the concrete provider. The analyzer itself is
- * intentionally a thin orchestrator in this milestone; prompt assembly,
- * response mapping, and business rules will be added when the
- * `POST /analyze-ticket` handler is implemented (next milestone).
+ * Orchestrates ticket analysis: rules engine for structured fields,
+ * LLM prose generation added in phase 4.
  */
 export class TicketAnalyzerService implements ITicketAnalyzerService {
   public constructor(private readonly provider: ILLMProvider) {}
 
   public async analyze(
-    _request: TicketAnalysisRequest,
+    request: TicketAnalysisRequest,
   ): Promise<Result<TicketAnalysisResponse, AppError>> {
-    return err(
-      new AIProviderError('Ticket analysis is not implemented in this milestone', {
-        provider:
-          this.provider.name === AI_PROVIDER.NOOP
-            ? AI_PROVIDER.NOOP
-            : this.provider.name,
-        metadata: { reason: 'analyzer_not_implemented' },
-      }),
-    );
+    void this.provider;
+
+    const structured = analyzeStructured(request);
+
+    return ok({
+      ticket_id: request.ticket_id,
+      ...structured,
+      ...PLACEHOLDER_PROSE,
+    });
   }
 }

@@ -68,7 +68,7 @@ export const buildAppGraph = (
 
   const docsRouter = buildDocsRouter();
   const judgeRouter = buildJudgeRouter({
-    analyzeTicketController: buildAnalyzeTicketController(),
+    analyzeTicketController: buildAnalyzeTicketController(container.ticketAnalyzerService),
   });
   const apiRouter = buildApiRouter({ v1Routes });
 
