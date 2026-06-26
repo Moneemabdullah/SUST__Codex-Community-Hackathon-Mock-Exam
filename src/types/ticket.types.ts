@@ -1,37 +1,48 @@
-/**
- * Domain types for the ticket-analysis endpoint.
- *
- * These are intentionally minimal at the scaffold stage. They will be
- * expanded (without breaking changes) once the business logic is approved.
- */
+import type {
+  CaseType,
+  Channel,
+  Department,
+  EvidenceVerdict,
+  Language,
+  Severity,
+  TransactionStatus,
+  TransactionType,
+  UserType,
+} from '../constants/ticket.constants.js';
 
-export interface Transaction {
-  id: string;
-  date: string;
+export interface TransactionHistoryEntry {
+  transaction_id: string;
+  timestamp: string;
+  type: TransactionType;
   amount: number;
-  currency: string;
-  description: string;
-  merchant?: string;
+  counterparty: string;
+  status: TransactionStatus;
 }
 
-export interface CustomerComplaint {
-  ticketId: string;
-  subject: string;
-  description: string;
-  channel: 'email' | 'chat' | 'phone' | 'web' | 'other';
-  receivedAt: string;
-}
-
+/** Problem statement §5 — analyze-ticket request body. */
 export interface TicketAnalysisRequest {
-  complaint: CustomerComplaint;
-  transactions: Transaction[];
+  ticket_id: string;
+  complaint: string;
+  language?: Language;
+  channel?: Channel;
+  user_type?: UserType;
+  campaign_context?: string;
+  transaction_history: TransactionHistoryEntry[];
+  metadata?: Record<string, unknown>;
 }
 
+/** Problem statement §6 — analyze-ticket response body. */
 export interface TicketAnalysisResponse {
-  ticketId: string;
-  category: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  summary: string;
-  recommendedAction: string;
-  relevantTransactions: string[];
+  ticket_id: string;
+  relevant_transaction_id: string | null;
+  evidence_verdict: EvidenceVerdict;
+  case_type: CaseType;
+  severity: Severity;
+  department: Department;
+  agent_summary: string;
+  recommended_next_action: string;
+  customer_reply: string;
+  human_review_required: boolean;
+  confidence?: number;
+  reason_codes?: string[];
 }

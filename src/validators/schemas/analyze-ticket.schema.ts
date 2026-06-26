@@ -1,32 +1,36 @@
 import { z } from 'zod';
-import { channel, currencyCode, idString, isoDateString, nonEmptyString, safeAmount } from './common.schema.js';
 
-/**
- * Skeleton schema for the analyze-ticket request.
- *
- * It is intentionally permissive at the scaffold stage: it enforces the
- * shape, types, and obvious invariants (non-empty strings, finite amounts,
- * ISO-4217 currency, known channels) but it does not yet encode any
- * business rules. Those will be layered in once the spec is approved.
- */
-export const analyzeTicketRequestSchema = z.object({
-  complaint: z.object({
-    ticketId: idString,
-    subject: nonEmptyString.max(200),
-    description: nonEmptyString.max(8000),
-    channel,
-    receivedAt: isoDateString,
-  }),
-  transactions: z.array(
-    z.object({
-      id: idString,
-      date: isoDateString,
-      amount: safeAmount,
-      currency: currencyCode,
-      description: nonEmptyString.max(500),
-      merchant: nonEmptyString.max(200).optional(),
-    }),
-  ),
+import {
+  CHANNEL,
+  LANGUAGE,
+  TRANSACTION_STATUS,
+  TRANSACTION_TYPE,
+  USER_TYPE,
+  enumValues,
+} from '../../constants/ticket.constants.js';
+
+const transactionHistoryEntrySchema = z.object({
+  transaction_id: z.string().min(1),
+  timestamp: z.string().datetime({ offset: true }),
+  type: z.enum(enumValues(TRANSACTION_TYPE)),
+  amount: z.number().finite().nonnegative(),
+  counterparty: z.string().min(1),
+  status: z.enum(enumValues(TRANSACTION_STATUS)),
 });
 
+/** Problem statement §5 — inbound analyze-ticket request. */
+export const analyzeTicketRequestSchema = z
+  .object({
+    ticket_id: z.string().min(1),
+    complaint: z.string(),
+    language: z.enum(enumValues(LANGUAGE)).optional(),
+    channel: z.enum(enumValues(CHANNEL)).optional(),
+    user_type: z.enum(enumValues(USER_TYPE)).optional(),
+    campaign_context: z.string().optional(),
+    transaction_history: z.array(transactionHistoryEntrySchema).optional().default([]),
+    metadata: z.record(z.string(), z.unknown()).optional(),
+  })
+  .strict();
+
 export type AnalyzeTicketRequestDto = z.infer<typeof analyzeTicketRequestSchema>;
+export type TransactionHistoryEntryDto = z.infer<typeof transactionHistoryEntrySchema>;

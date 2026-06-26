@@ -1,15 +1,22 @@
 import type { IController } from '../interfaces/http/IController.js';
-import { ValidationError } from '../errors/ValidationError.js';
+import {
+  CASE_TYPE,
+  DEPARTMENT,
+  EVIDENCE_VERDICT,
+  SEVERITY,
+} from '../constants/ticket.constants.js';
 import { HTTP_STATUS, CONTENT_TYPE } from '../constants/http.constants.js';
+import type { TicketAnalysisResponse } from '../types/ticket.types.js';
+import type { AnalyzeTicketRequestDto } from '../validators/schemas/analyze-ticket.schema.js';
 
 /** Minimal stub response until the analyzer pipeline is wired (phase 6). */
-const buildStubResponse = (ticketId: string) => ({
-  ticket_id: ticketId,
+const buildStubResponse = (request: AnalyzeTicketRequestDto): TicketAnalysisResponse => ({
+  ticket_id: request.ticket_id,
   relevant_transaction_id: null,
-  evidence_verdict: 'insufficient_data',
-  case_type: 'other',
-  severity: 'low',
-  department: 'customer_support',
+  evidence_verdict: EVIDENCE_VERDICT.INSUFFICIENT_DATA,
+  case_type: CASE_TYPE.OTHER,
+  severity: SEVERITY.LOW,
+  department: DEPARTMENT.CUSTOMER_SUPPORT,
   agent_summary: 'Stub response — analyzer not yet implemented.',
   recommended_next_action: 'Implement rules engine in phase 3.',
   customer_reply:
@@ -17,28 +24,11 @@ const buildStubResponse = (ticketId: string) => ({
   human_review_required: false,
 });
 
-const requireTicketId = (body: unknown): string => {
-  if (body === null || typeof body !== 'object') {
-    throw new ValidationError('Request body must be a JSON object', {
-      fields: [{ path: '', message: 'Expected a JSON object' }],
-    });
-  }
-
-  const ticketId = (body as Record<string, unknown>).ticket_id;
-  if (typeof ticketId !== 'string' || ticketId.trim() === '') {
-    throw new ValidationError('ticket_id is required', {
-      fields: [{ path: 'ticket_id', message: 'Required non-empty string' }],
-    });
-  }
-
-  return ticketId.trim();
-};
-
 export const buildAnalyzeTicketController = (): IController => (req, res) => {
-  const ticketId = requireTicketId(req.body);
+  const request = req.body as AnalyzeTicketRequestDto;
 
   res
     .status(HTTP_STATUS.OK)
     .type(CONTENT_TYPE.JSON)
-    .json(buildStubResponse(ticketId));
+    .json(buildStubResponse(request));
 };

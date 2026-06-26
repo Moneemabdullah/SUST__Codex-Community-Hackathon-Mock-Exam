@@ -1,5 +1,6 @@
 export * from './AppError.js';
 export * from './ValidationError.js';
+export * from './SemanticValidationError.js';
 export * from './NotFoundError.js';
 export * from './RateLimitError.js';
 export * from './UnauthorizedError.js';

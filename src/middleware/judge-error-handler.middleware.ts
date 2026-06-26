@@ -2,6 +2,7 @@ import type { Logger } from 'pino';
 
 import type { IErrorHandler } from '../interfaces/middleware/IErrorHandler.js';
 import { ValidationError } from '../errors/ValidationError.js';
+import { SemanticValidationError } from '../errors/SemanticValidationError.js';
 import { sendJudgeError } from '../utils/judge-response.util.js';
 import { HTTP_STATUS } from '../constants/http.constants.js';
 
@@ -13,9 +14,8 @@ const isJsonSyntaxError = (err: unknown): err is SyntaxError & { body: unknown }
   err instanceof SyntaxError && typeof err === 'object' && err !== null && 'body' in err;
 
 /**
- * Flat error responses for judge harness routes. Mounted ahead of the
+ * Mounted ahead of the
  * global envelope error handler so `/health` and `/analyze-ticket`
- * never return `{ success, message, data, meta }`.
  */
 export const judgeErrorHandlerMiddleware =
   (logger: Logger): IErrorHandler =>
@@ -35,6 +35,12 @@ export const judgeErrorHandlerMiddleware =
     if (isJsonSyntaxError(err)) {
       log.warn({ reqId: req.id, path: req.path }, 'Invalid JSON on judge route');
       sendJudgeError(res, HTTP_STATUS.BAD_REQUEST, 'Invalid JSON');
+      return;
+    }
+
+    if (err instanceof SemanticValidationError) {
+      log.warn({ reqId: req.id, path: req.path, fields: err.fields }, err.message);
+      sendJudgeError(res, HTTP_STATUS.UNPROCESSABLE_ENTITY, err.message);
       return;
     }
 

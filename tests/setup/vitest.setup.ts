@@ -5,5 +5,5 @@
 process.env.NODE_ENV = 'test';
 process.env.AI_PROVIDER ??= 'noop';
 process.env.LOG_LEVEL ??= 'silent';
-process.env.PORT ??= '0';
+process.env.PORT ??= '3001';
 process.env.HOST ??= '127.0.0.1';
