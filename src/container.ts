@@ -6,8 +6,10 @@ import { HealthService } from './services/health.service.js';
 import { VersionService } from './services/version.service.js';
 import { TicketAnalyzerService } from './services/ticket/ticket-analyzer.service.js';
 import { LLMProviderFactory } from './services/ai/llm-provider.factory.js';
+import { buildAnalyzeTicketController } from './controllers/analyze-ticket.controller.js';
 import { buildV1Router } from './routes/v1/index.js';
 import { buildApiRouter } from './routes/index.js';
+import { buildJudgeRouter } from './routes/judge.routes.js';
 import { buildDocsRouter } from './infra/docs/swagger.setup.js';
 import { buildExpressApp } from './infra/http/express-app.factory.js';
 
@@ -65,9 +67,12 @@ export const buildAppGraph = (
   const v1Routes = buildV1Router(container.healthService, container.versionService);
 
   const docsRouter = buildDocsRouter();
+  const judgeRouter = buildJudgeRouter({
+    analyzeTicketController: buildAnalyzeTicketController(),
+  });
   const apiRouter = buildApiRouter({ v1Routes });
 
-  const app = buildExpressApp({ docsRouter, apiRouter });
+  const app = buildExpressApp({ docsRouter, judgeRouter, apiRouter });
 
   return Object.freeze({ container, app });
 };

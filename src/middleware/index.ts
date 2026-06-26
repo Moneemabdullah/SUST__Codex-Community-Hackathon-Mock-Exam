@@ -6,4 +6,5 @@ export * from './rate-limit.middleware.js';
 export * from './async-handler.middleware.js';
 export * from './not-found.middleware.js';
 export * from './error-handler.middleware.js';
+export * from './judge-error-handler.middleware.js';
 export * from './security-headers.middleware.js';

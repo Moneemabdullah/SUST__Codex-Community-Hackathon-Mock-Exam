@@ -39,4 +39,5 @@ Thumbs.db
 
 # puku metadata (editor caches)
 .puku/
+plans/
 

@@ -11,11 +11,13 @@ import {
   errorHandlerMiddleware,
   securityHeadersMiddleware,
 } from '../../middleware/index.js';
+import { judgeErrorHandlerMiddleware } from '../../middleware/judge-error-handler.middleware.js';
 import { httpLoggerMiddleware } from '../logger/logger.middleware.js';
 
 export interface BuildAppOptions {
   /** Routers wired by the composition root. */
   readonly docsRouter: Router;
+  readonly judgeRouter: Router;
   readonly apiRouter: Router;
   /** Hook for tests to swap middleware (e.g. disable rate limit). */
   beforeMountRoutes?: (app: Application) => void;
@@ -59,13 +61,19 @@ export const buildExpressApp = (options: BuildAppOptions): Application => {
   // Docs first so it doesn't get hidden behind a future rate-limit tuning.
   app.use('/docs', options.docsRouter);
 
-  // [10] Routers
+  // [10] Judge harness routes — raw JSON at application root (before api router).
+  app.use(options.judgeRouter);
+
+  // [11] Internal API routes (envelope responses).
   app.use(options.apiRouter);
 
-  // [11] 404
+  // [12] 404
   app.use(notFoundMiddleware);
 
-  // [12] Global error handler (must be last)
+  // [13] Judge flat errors (must precede envelope error handler).
+  app.use(judgeErrorHandlerMiddleware(rootLogger));
+
+  // [14] Global error handler (must be last)
   app.use(errorHandlerMiddleware(rootLogger));
 
   return app;
