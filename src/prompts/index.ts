@@ -1,1 +1,1 @@
-export { ANALYZE_TICKET_PROMPTS } from './manifest.js';
+export { ANALYZE_TICKET_PROMPTS, ANALYZE_TICKET_PROSE_PROMPTS } from './manifest.js';

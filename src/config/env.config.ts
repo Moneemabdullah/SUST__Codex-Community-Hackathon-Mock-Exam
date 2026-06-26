@@ -38,7 +38,7 @@ const envSchema = z.object({
   [ENV_KEY.CLAUDE_API_KEY]: z.string().optional(),
   [ENV_KEY.CLAUDE_MODEL]: z.string().default('claude-3-5-sonnet-latest'),
   [ENV_KEY.OPENROUTER_API_KEY]: z.string().optional(),
-  [ENV_KEY.OPENROUTER_MODEL]: z.string().default('anthropic/claude-3.5-sonnet'),
+  [ENV_KEY.OPENROUTER_MODEL]: z.string().default('nvidia/nemotron-3-super-120b-a12b:free'),
 });
 
 export type RawEnv = z.infer<typeof envSchema>;

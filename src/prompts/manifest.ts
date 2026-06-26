@@ -12,3 +12,8 @@ export const ANALYZE_TICKET_PROMPTS = Object.freeze({
   system: load('analyze-ticket.v1.system.txt'),
   userTemplate: load('analyze-ticket.v1.user.txt'),
 });
+
+export const ANALYZE_TICKET_PROSE_PROMPTS = Object.freeze({
+  version: '1.0.0',
+  system: load('analyze-ticket-prose.system.txt'),
+});

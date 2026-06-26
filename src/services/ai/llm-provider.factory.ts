@@ -4,6 +4,7 @@ import type { ILLMProvider } from '../../interfaces/ai/ILLMProvider.js';
 import type { ILLMProviderFactory } from '../../interfaces/ai/ILLMProviderFactory.js';
 import { aiConfig } from '../../config/ai.config.js';
 import { NoopProvider } from './providers/noop.provider.js';
+import { OpenRouterProvider } from './providers/openrouter.provider.js';
 
 type ProviderConstructor = new () => ILLMProvider;
 
@@ -20,7 +21,7 @@ const REGISTRY: Readonly<Record<LLMProviderName, ProviderConstructor | undefined
     [AI_PROVIDER.OPENAI]: undefined,
     [AI_PROVIDER.GEMINI]: undefined,
     [AI_PROVIDER.CLAUDE]: undefined,
-    [AI_PROVIDER.OPENROUTER]: undefined,
+    [AI_PROVIDER.OPENROUTER]: OpenRouterProvider,
   });
 
 export class LLMProviderFactory implements ILLMProviderFactory {
